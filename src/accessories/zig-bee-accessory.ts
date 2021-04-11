@@ -149,12 +149,11 @@ export abstract class ZigBeeAccessory {
   public async ping(): Promise<void> {
     try {
       await this.zigBeeDeviceDescriptor.ping();
-      await this.configureDevice();
-      this.zigBeeDeviceDescriptor.updateLastSeen();
-      this.zigBeeDeviceDescriptor.save();
       this.missedPing = 0;
       this.isOnline = true;
       setTimeout(() => this.ping(), this.interval);
+      this.zigBeeDeviceDescriptor.updateLastSeen();
+      this.zigBeeDeviceDescriptor.save();
     } catch (e) {
       this.log.debug(e);
       this.log.warn(`No response from ${this.entity.settings.friendlyName}. Is it online?`);
@@ -168,6 +167,12 @@ export abstract class ZigBeeAccessory {
       } else {
         setTimeout(() => this.ping(), this.interval);
       }
+    }
+
+    try {
+      await this.configureDevice();
+    } catch (e) {
+      this.log.error(`Error configuring device`, e);
     }
   }
 
