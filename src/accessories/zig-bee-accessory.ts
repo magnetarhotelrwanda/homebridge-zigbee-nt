@@ -125,6 +125,7 @@ export abstract class ZigBeeAccessory {
       isDeviceRouter(this.zigBeeDeviceDescriptor) &&
       this.platform.config.disableRoutingPolling !== true
     ) {
+      this.missedPing = 0;
       this.isOnline = false; // wait until we can ping the device
       this.log.info(`Device ${this.friendlyName} is a router, install ping`);
       this.interval = this.getPollingInterval();
@@ -155,6 +156,7 @@ export abstract class ZigBeeAccessory {
       this.isOnline = true;
       setTimeout(() => this.ping(), this.interval);
     } catch (e) {
+      this.log.debug(e);
       this.log.warn(`No response from ${this.entity.settings.friendlyName}. Is it online?`);
       this.missedPing++;
       if (this.missedPing > MAX_PING_ATTEMPTS) {
