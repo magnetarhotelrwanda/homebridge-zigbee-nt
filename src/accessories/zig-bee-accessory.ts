@@ -11,7 +11,7 @@ import {
   MAX_POLL_INTERVAL,
   MIN_POLL_INTERVAL,
 } from '../utils/device';
-// import { HSBType } from '../utils/hsb-type';
+import { HSBType } from '../utils/hsb-type';
 import { ButtonAction, DeviceState, ZigBeeDefinition, ZigBeeEntity } from '../zigbee/types';
 import { ZigBeeClient } from '../zigbee/zig-bee-client';
 import { ConfigurableAccessory } from './configurable-accessory';
@@ -317,44 +317,44 @@ export abstract class ZigBeeAccessory {
             service.updateCharacteristic(this.platform.Characteristic.On, state.state === 'ON');
           }
           break;
-        // case Service.Lightbulb.UUID:
-        //   if (isValidValue(state.state)) {
-        //     service.updateCharacteristic(this.platform.Characteristic.On, state.state === 'ON');
-        //   }
-        //   if (this.supports('brightness')) {
-        //     if (isValidValue(state.brightness_percent)) {
-        //       service.updateCharacteristic(
-        //         this.platform.Characteristic.Brightness,
-        //         state.brightness_percent
-        //       );
-        //     } else if (isValidValue(state.brightness)) {
-        //       service.updateCharacteristic(
-        //         this.platform.Characteristic.Brightness,
-        //         Math.round(Number(state.brightness) / 2.55)
-        //       );
-        //     }
-        //   }
-        //   if (this.supports('color_temp') && isValidValue(state.color_temp)) {
-        //     service.updateCharacteristic(
-        //       this.platform.Characteristic.ColorTemperature,
-        //       state.color_temp
-        //     );
-        //   }
-        //   if (this.supports('color_hs') && isValidValue(state.color?.s)) {
-        //     if (isValidValue(state.color?.s)) {
-        //       service.updateCharacteristic(this.platform.Characteristic.Saturation, state.color.s);
-        //     }
-        //     if (isValidValue(state.color?.hue)) {
-        //       service.updateCharacteristic(this.platform.Characteristic.Hue, state.color.hue);
-        //     }
-        //   } else if (this.supports('color_xy') && isValidValue(state.color?.x)) {
-        //     const hsbType = HSBType.fromXY(state.color.x, state.color.y);
-        //     state.color.hue = hsbType.hue;
-        //     state.color.s = hsbType.saturation;
-        //     service.updateCharacteristic(Characteristic.Hue, state.color.hue);
-        //     service.updateCharacteristic(Characteristic.Saturation, state.color.s);
-        //   }
-        //   break;
+        case Service.Lightbulb.UUID:
+          if (isValidValue(state.state)) {
+            service.updateCharacteristic(this.platform.Characteristic.On, state.state === 'ON');
+          }
+          if (this.supports('brightness')) {
+            if (isValidValue(state.brightness_percent)) {
+              service.updateCharacteristic(
+                this.platform.Characteristic.Brightness,
+                state.brightness_percent
+              );
+            } else if (isValidValue(state.brightness)) {
+              service.updateCharacteristic(
+                this.platform.Characteristic.Brightness,
+                Math.round(Number(state.brightness) / 2.55)
+              );
+            }
+          }
+          if (this.supports('color_temp') && isValidValue(state.color_temp)) {
+            service.updateCharacteristic(
+              this.platform.Characteristic.ColorTemperature,
+              state.color_temp
+            );
+          }
+          if (this.supports('color_hs') && isValidValue(state.color?.s)) {
+            if (isValidValue(state.color?.s)) {
+              service.updateCharacteristic(this.platform.Characteristic.Saturation, state.color.s);
+            }
+            if (isValidValue(state.color?.hue)) {
+              service.updateCharacteristic(this.platform.Characteristic.Hue, state.color.hue);
+            }
+          } else if (this.supports('color_xy') && isValidValue(state.color?.x)) {
+            const hsbType = HSBType.fromXY(state.color.x, state.color.y);
+            state.color.hue = hsbType.hue;
+            state.color.s = hsbType.saturation;
+            service.updateCharacteristic(Characteristic.Hue, state.color.hue);
+            service.updateCharacteristic(Characteristic.Saturation, state.color.s);
+          }
+          break;
         case Service.LightSensor.UUID:
           if (this.supports('illuminance_lux') && isValidValue(state.illuminance_lux)) {
             service.updateCharacteristic(
