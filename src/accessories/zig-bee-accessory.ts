@@ -348,6 +348,10 @@ export abstract class ZigBeeAccessory {
             state.color.s = hsbType.saturation;
             service.updateCharacteristic(Characteristic.Hue, state.color.hue);
             service.updateCharacteristic(Characteristic.Saturation, state.color.s);
+            service.updateCharacteristic(
+              this.platform.Characteristic.Brightness,
+              hsbType.brightness
+            );
           }
           break;
         case Service.LightSensor.UUID:
@@ -356,8 +360,7 @@ export abstract class ZigBeeAccessory {
               Characteristic.CurrentAmbientLightLevel,
               state.illuminance_lux
             );
-          }
-          if (this.supports('illuminance') && isValidValue(state.illuminance)) {
+          } else if (this.supports('illuminance') && isValidValue(state.illuminance)) {
             service.updateCharacteristic(
               Characteristic.CurrentAmbientLightLevel,
               state.illuminance
