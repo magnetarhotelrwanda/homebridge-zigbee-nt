@@ -300,6 +300,7 @@ export class ZigBeeClient {
 
   async setBrightnessPercent(device: Device, brightnessPercent: number) {
     const brightness = Math.round(Number(brightnessPercent) * 2.55);
+    this.log.debug(`Updating Brightness ${brightness}`);
     return this.writeDeviceState(device, {
       brightness,
     });
@@ -342,14 +343,17 @@ export class ZigBeeClient {
   }
 
   setHue(device: Device, hue: number): Promise<DeviceState> {
+    this.log.debug(`Updating HUE ${hue}`);
     return this.writeDeviceState(device, { color: { hue } });
   }
 
   setColorXY(device: Device, x: number, y: number): Promise<DeviceState> {
+    this.log.debug(`Updating XY color ${x} ${y}`);
     return this.writeDeviceState(device, { color: { x, y } });
   }
 
   setColorRGB(device: Device, r: number, g: number, b: number): Promise<DeviceState> {
+    this.log.debug(`Updating RGB color ${r} ${g} ${b}`);
     return this.writeDeviceState(device, { color: { rgb: `${r},${g},${b}` } });
   }
 
