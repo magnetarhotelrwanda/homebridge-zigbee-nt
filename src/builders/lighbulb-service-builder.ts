@@ -214,6 +214,7 @@ export class LighbulbServiceBuilder extends ServiceBuilder {
       .on(CharacteristicEventTypes.SET, async (h: number, callback: CharacteristicSetCallback) => {
         try {
           if (this.isOnline) {
+            this.log.debug(`Updating HUE characteristic ${h}`);
             const s = this.service.getCharacteristic(Characteristic.Saturation).value as number;
             const v = this.service.getCharacteristic(Characteristic.Brightness).value as number;
             const hsbType = new HSBType(h, s, v);
@@ -246,6 +247,7 @@ export class LighbulbServiceBuilder extends ServiceBuilder {
         async (saturation: number, callback: CharacteristicSetCallback) => {
           try {
             if (this.isOnline) {
+              this.log.debug(`Updating Saturation characteristic ${saturation}`);
               const v = this.service.getCharacteristic(Characteristic.Brightness).value as number;
               const hue = this.service.getCharacteristic(Characteristic.Hue).value as number;
               const hsbType = new HSBType(hue, saturation, v);
@@ -278,6 +280,7 @@ export class LighbulbServiceBuilder extends ServiceBuilder {
         async (brightnessPercent: number, callback: CharacteristicSetCallback) => {
           try {
             if (this.isOnline) {
+              this.log.debug(`Updating Brightness characteristic ${brightnessPercent}`);
               await this.client.setBrightnessPercent(this.device, brightnessPercent);
               return callback();
             } else {
