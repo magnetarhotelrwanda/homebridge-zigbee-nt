@@ -10,7 +10,7 @@ export class PhilipsHueWhiteAndColor extends PhilipsHueWhite {
       this.state
     )
       .withOnOff()
-      .withColorXY()
+      .withColorHS()
       .build();
     return [lightbulbService];
   }
