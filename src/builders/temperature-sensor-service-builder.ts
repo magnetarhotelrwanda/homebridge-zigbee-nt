@@ -3,6 +3,7 @@ import { Callback, CharacteristicEventTypes, PlatformAccessory } from 'homebridg
 import { ZigbeeNTHomebridgePlatform } from '../platform';
 import { DeviceState } from '../zigbee/types';
 import { SensorServiceBuilder } from './sensor-service-builder';
+import { get } from 'lodash';
 
 export class TemperatureSensorServiceBuilder extends SensorServiceBuilder {
   constructor(
@@ -16,12 +17,13 @@ export class TemperatureSensorServiceBuilder extends SensorServiceBuilder {
 
   public withTemperature(): TemperatureSensorServiceBuilder {
     const Characteristic = this.platform.Characteristic;
-    this.state.temperature = 0;
 
     this.service
       .getCharacteristic(Characteristic.CurrentTemperature)
       .on(CharacteristicEventTypes.GET, async (callback: Callback) => {
-        callback(null, this.state.temperature);
+        const temperature: number = get(this.state, 'temperature', 0);
+        this.log.debug(`Getting temperature for ${this.friendlyName}: ${temperature}`);
+        callback(null, temperature);
       });
 
     return this;
